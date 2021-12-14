@@ -76,7 +76,7 @@ namespace Proyecto2
         //Nuevo Sitio
 
         [Test]
-        public void Validar_Registro_e_ingreso()
+        public void Validar_registro_e_ingreso()
         {
             try
             {
@@ -192,7 +192,48 @@ namespace Proyecto2
         }
         
         [Test]
-        public void Validar_la_Navegacion_por_categorias_y_seleccionar_un_articulo()
+        public void Validar_envio_de_contacto()
+        {
+            try
+            {
+                //Arrange
+                Driver.Navigate().GoToUrl("https://www.demoblaze.com/");
+                Driver.Manage().Window.Maximize();
+                Driver.Manage().Timeouts().PageLoad.Add(TimeSpan.FromSeconds(10));
+                //Act
+                IWebElement input = Driver.FindElement(By.XPath("/html/body/nav/div[1]/ul/li[2]/a"));
+                input.Click();
+                Thread.Sleep(2000);
+                IWebElement contac = Driver.FindElement(By.Id("recipient-email"));
+                contac.Clear();
+                contac.SendKeys("user@gmail.com");
+                IWebElement NameContac = Driver.FindElement(By.Id("recipient-name"));
+                NameContac.Clear();
+                NameContac.SendKeys("user");
+                IWebElement Messagge = Driver.FindElement(By.Id("message-text"));
+                Messagge.Clear();
+                Messagge.SendKeys("This is a Test Contac");
+                IWebElement Send = Driver.FindElement(By.XPath("/html/body/div[1]/div/div/div[3]/button[2]"));
+                Send.Click();
+                Thread.Sleep(1000);
+                IAlert alert = Driver.SwitchTo().Alert();
+                alert.Accept();
+
+                IWebElement Succes = Driver.FindElement(By.Id("nava"));
+                string val = Succes.GetAttribute("innerText");
+
+                Assert.AreEqual(" PRODUCT STORE", val);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Excepción al detenerse" + ex);
+                Driver.Dispose();
+                throw;
+            }
+        }
+                
+        [Test]
+        public void Validar_la_navegacion_por_categorias_y_seleccionar_un_articulo()
         {
             try
             {
@@ -226,7 +267,7 @@ namespace Proyecto2
         }
 
         [Test]
-        public void Validar_cuando_se_Agrega_un_articulo()
+        public void Validar_cuando_se_agrega_un_articulo()
         {
             try
             {
