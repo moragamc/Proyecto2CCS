@@ -241,6 +241,7 @@ namespace Proyecto2
                 Thread.Sleep(1000);
                 Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[3]/div/div/div[2]/div[2]/button[1]")).Click();
                 Thread.Sleep(1000);
+                Assert.That(Driver.FindElement(By.CssSelector(".alert")).Text, Is.EqualTo("Success: You have added iMac to your shopping cart!\r\n×"));
             }
             catch (Exception ex)
             {
