@@ -13,7 +13,7 @@ namespace Proyecto2
 {
     //[TestFixture(typeof(EdgeDriver))]
     [TestFixture(typeof(ChromeDriver))]
-    //[TestFixture(typeof(FirefoxDriver))]
+   // [TestFixture(typeof(FirefoxDriver))]
     public class CasosDePrueba_Deberia<TWebDriver> where TWebDriver : IWebDriver, new()
     {
         //Declaración de variables
@@ -32,6 +32,7 @@ namespace Proyecto2
         internal IWebDriver ObtengaElDriverChrome()
         {
             ChromeOptions opcionesDeChrome = new ChromeOptions();
+            opcionesDeChrome.AddArgument("--ignore-certificate-errors");
             //opcionesDeChrome.AddArguments("incognito");
             Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), opcionesDeChrome);
             return Driver;
@@ -191,14 +192,14 @@ namespace Proyecto2
         }
         
         [Test]
-        public void Validar_la_Navegacion_por_categorias()
+        public void Validar_la_Navegacion_por_categorias_y_seleccionar_un_articulo()
         {
             try
             {
                 //Arrange
                 Driver.Navigate().GoToUrl("https://www.demoblaze.com/index.html");
+                Driver.Manage().Window.Maximize();
                 //Act
-
                 Driver.FindElement(By.XPath("//a[contains(text(),\'Monitors\')]")).Click();
                 Thread.Sleep(2000);
                 Driver.FindElement(By.XPath("//a[contains(text(),\'Apple monitor 24\')]")).Click();
@@ -224,25 +225,29 @@ namespace Proyecto2
             }
         }
 
-        //[Test]
-        //public void CasoPrueba()
-        //    {
-        //        try
-        //        {
-        //        //Act
-        //            Driver.Navigate().GoToUrl("");
+        [Test]
+        public void Validar_cuando_se_Agrega_un_articulo()
+        {
+            try
+            {
+                //Act
+                Driver.Navigate().GoToUrl("http://opencart.abstracta.us/");
 
-
-        //        //Assert
-        //        Assert.That(Driver.SwitchTo().Alert().Text, Is.EqualTo("Success: You have added iMac to your shopping cart!"));
-
-        //    }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine("Excepción al detenerse" + ex);
-        //            Driver.Dispose();
-        //            throw;
-        //        }
-        //    }
+                Driver.FindElement(By.Id("search")).Click();
+                Thread.Sleep(2000);
+                Driver.FindElement(By.Name("search")).SendKeys("imac");
+                Thread.Sleep(1000);
+                Driver.FindElement(By.XPath("/html/body/header/div/div/div[2]/div/span/button")).Click();
+                Thread.Sleep(1000);
+                Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[3]/div/div/div[2]/div[2]/button[1]")).Click();
+                Thread.Sleep(1000);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Excepción al detenerse" + ex);
+                Driver.Dispose();
+                throw;
+            }
         }
+    }
     }
